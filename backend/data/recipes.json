@@ -1,0 +1,439 @@
+[
+  {
+    "title": "Classic Scrambled Eggs",
+    "ingredients": [
+      {"name": "eggs", "quantity": 3, "unit": "count", "required": true},
+      {"name": "butter", "quantity": 1, "unit": "tbsp", "required": true},
+      {"name": "milk", "quantity": 2, "unit": "tbsp", "required": false},
+      {"name": "salt", "quantity": null, "unit": null, "required": true},
+      {"name": "pepper", "quantity": null, "unit": null, "required": false}
+    ],
+    "instructions": "Beat eggs with milk. Melt butter in pan over medium-low heat. Add egg mixture and stir gently until just set. Season with salt and pepper.",
+    "cuisine": "American",
+    "prep_time_mins": 10
+  },
+  {
+    "title": "Chicken Stir Fry",
+    "ingredients": [
+      {"name": "chicken breast", "quantity": 1, "unit": "lbs", "required": true},
+      {"name": "broccoli", "quantity": 2, "unit": "cups", "required": true},
+      {"name": "soy sauce", "quantity": 3, "unit": "tbsp", "required": true},
+      {"name": "garlic", "quantity": 3, "unit": "count", "required": true},
+      {"name": "ginger", "quantity": 1, "unit": "tsp", "required": false},
+      {"name": "sesame oil", "quantity": 1, "unit": "tbsp", "required": false},
+      {"name": "rice", "quantity": 2, "unit": "cups", "required": true}
+    ],
+    "instructions": "Slice chicken and marinate in soy sauce. Stir fry garlic and ginger, add chicken until cooked through. Add broccoli and remaining sauce. Serve over rice.",
+    "cuisine": "Asian",
+    "prep_time_mins": 25
+  },
+  {
+    "title": "Pasta Marinara",
+    "ingredients": [
+      {"name": "pasta", "quantity": 8, "unit": "oz", "required": true},
+      {"name": "tomatoes", "quantity": 2, "unit": "count", "required": true},
+      {"name": "garlic", "quantity": 4, "unit": "count", "required": true},
+      {"name": "olive oil", "quantity": 3, "unit": "tbsp", "required": true},
+      {"name": "basil", "quantity": null, "unit": null, "required": false},
+      {"name": "parmesan", "quantity": null, "unit": null, "required": false}
+    ],
+    "instructions": "Cook pasta al dente. Sauté garlic in olive oil, add crushed tomatoes, simmer 15 mins. Toss pasta in sauce, top with basil and parmesan.",
+    "cuisine": "Italian",
+    "prep_time_mins": 30
+  },
+  {
+    "title": "Greek Salad",
+    "ingredients": [
+      {"name": "cucumber", "quantity": 1, "unit": "count", "required": true},
+      {"name": "tomatoes", "quantity": 3, "unit": "count", "required": true},
+      {"name": "red onion", "quantity": 0.5, "unit": "count", "required": true},
+      {"name": "feta cheese", "quantity": 4, "unit": "oz", "required": true},
+      {"name": "olives", "quantity": 0.5, "unit": "cups", "required": false},
+      {"name": "olive oil", "quantity": 3, "unit": "tbsp", "required": true},
+      {"name": "lemon", "quantity": 1, "unit": "count", "required": true}
+    ],
+    "instructions": "Chop cucumber, tomatoes, and onion. Combine with olives and feta. Dress with olive oil and lemon juice. Season with oregano.",
+    "cuisine": "Greek",
+    "prep_time_mins": 15
+  },
+  {
+    "title": "Banana Smoothie",
+    "ingredients": [
+      {"name": "banana", "quantity": 2, "unit": "count", "required": true},
+      {"name": "milk", "quantity": 1, "unit": "cups", "required": true},
+      {"name": "yogurt", "quantity": 0.5, "unit": "cups", "required": false},
+      {"name": "honey", "quantity": 1, "unit": "tbsp", "required": false}
+    ],
+    "instructions": "Blend banana, milk, and yogurt until smooth. Add honey to taste. Serve immediately.",
+    "cuisine": "American",
+    "prep_time_mins": 5
+  },
+  {
+    "title": "Grilled Cheese Sandwich",
+    "ingredients": [
+      {"name": "bread", "quantity": 2, "unit": "count", "required": true},
+      {"name": "cheddar cheese", "quantity": 2, "unit": "oz", "required": true},
+      {"name": "butter", "quantity": 1, "unit": "tbsp", "required": true}
+    ],
+    "instructions": "Butter bread slices. Place cheese between slices. Grill in pan over medium heat until golden on both sides and cheese melts.",
+    "cuisine": "American",
+    "prep_time_mins": 10
+  },
+  {
+    "title": "Vegetable Soup",
+    "ingredients": [
+      {"name": "carrots", "quantity": 2, "unit": "count", "required": true},
+      {"name": "celery", "quantity": 2, "unit": "count", "required": true},
+      {"name": "onion", "quantity": 1, "unit": "count", "required": true},
+      {"name": "potatoes", "quantity": 2, "unit": "count", "required": true},
+      {"name": "vegetable broth", "quantity": 4, "unit": "cups", "required": true},
+      {"name": "tomatoes", "quantity": 1, "unit": "count", "required": false},
+      {"name": "garlic", "quantity": 2, "unit": "count", "required": true}
+    ],
+    "instructions": "Sauté onion, carrots, celery, and garlic. Add broth, potatoes, and tomatoes. Simmer 20 mins until vegetables are tender. Season to taste.",
+    "cuisine": "American",
+    "prep_time_mins": 35
+  },
+  {
+    "title": "Avocado Toast",
+    "ingredients": [
+      {"name": "bread", "quantity": 2, "unit": "count", "required": true},
+      {"name": "avocado", "quantity": 1, "unit": "count", "required": true},
+      {"name": "lemon", "quantity": 0.5, "unit": "count", "required": true},
+      {"name": "red pepper flakes", "quantity": null, "unit": null, "required": false},
+      {"name": "eggs", "quantity": 2, "unit": "count", "required": false}
+    ],
+    "instructions": "Toast bread. Mash avocado with lemon juice and salt. Spread on toast. Top with red pepper flakes. Optionally add poached eggs.",
+    "cuisine": "American",
+    "prep_time_mins": 10
+  },
+  {
+    "title": "Fried Rice",
+    "ingredients": [
+      {"name": "rice", "quantity": 2, "unit": "cups", "required": true},
+      {"name": "eggs", "quantity": 2, "unit": "count", "required": true},
+      {"name": "soy sauce", "quantity": 3, "unit": "tbsp", "required": true},
+      {"name": "green onions", "quantity": 3, "unit": "count", "required": false},
+      {"name": "peas", "quantity": 0.5, "unit": "cups", "required": false},
+      {"name": "carrots", "quantity": 1, "unit": "count", "required": false},
+      {"name": "garlic", "quantity": 2, "unit": "count", "required": true}
+    ],
+    "instructions": "Use day-old cold rice. Scramble eggs, set aside. Stir fry garlic, add vegetables. Add rice and soy sauce, stir fry on high heat. Mix in eggs and green onions.",
+    "cuisine": "Asian",
+    "prep_time_mins": 20
+  },
+  {
+    "title": "Tomato Basil Bruschetta",
+    "ingredients": [
+      {"name": "bread", "quantity": 4, "unit": "count", "required": true},
+      {"name": "tomatoes", "quantity": 3, "unit": "count", "required": true},
+      {"name": "basil", "quantity": 10, "unit": "count", "required": true},
+      {"name": "garlic", "quantity": 2, "unit": "count", "required": true},
+      {"name": "olive oil", "quantity": 3, "unit": "tbsp", "required": true},
+      {"name": "balsamic vinegar", "quantity": 1, "unit": "tbsp", "required": false}
+    ],
+    "instructions": "Toast bread slices. Dice tomatoes and mix with basil, garlic, olive oil, and balsamic. Spoon mixture onto toasted bread.",
+    "cuisine": "Italian",
+    "prep_time_mins": 15
+  },
+  {
+    "title": "Chicken Quesadillas",
+    "ingredients": [
+      {"name": "chicken breast", "quantity": 0.5, "unit": "lbs", "required": true},
+      {"name": "tortillas", "quantity": 4, "unit": "count", "required": true},
+      {"name": "cheddar cheese", "quantity": 4, "unit": "oz", "required": true},
+      {"name": "bell pepper", "quantity": 1, "unit": "count", "required": false},
+      {"name": "onion", "quantity": 0.5, "unit": "count", "required": false},
+      {"name": "sour cream", "quantity": null, "unit": null, "required": false},
+      {"name": "salsa", "quantity": null, "unit": null, "required": false}
+    ],
+    "instructions": "Cook and shred chicken. Sauté peppers and onion. Assemble quesadillas with chicken, cheese, and vegetables. Cook in pan until crispy. Serve with sour cream and salsa.",
+    "cuisine": "Mexican",
+    "prep_time_mins": 25
+  },
+  {
+    "title": "Overnight Oats",
+    "ingredients": [
+      {"name": "oats", "quantity": 0.5, "unit": "cups", "required": true},
+      {"name": "milk", "quantity": 0.5, "unit": "cups", "required": true},
+      {"name": "yogurt", "quantity": 0.25, "unit": "cups", "required": false},
+      {"name": "banana", "quantity": 1, "unit": "count", "required": false},
+      {"name": "honey", "quantity": 1, "unit": "tbsp", "required": false},
+      {"name": "chia seeds", "quantity": 1, "unit": "tbsp", "required": false}
+    ],
+    "instructions": "Combine oats, milk, and yogurt in jar. Add honey and chia seeds. Refrigerate overnight. Top with sliced banana before serving.",
+    "cuisine": "American",
+    "prep_time_mins": 5
+  },
+  {
+    "title": "Beef Tacos",
+    "ingredients": [
+      {"name": "ground beef", "quantity": 1, "unit": "lbs", "required": true},
+      {"name": "taco shells", "quantity": 8, "unit": "count", "required": true},
+      {"name": "onion", "quantity": 1, "unit": "count", "required": true},
+      {"name": "garlic", "quantity": 2, "unit": "count", "required": true},
+      {"name": "cumin", "quantity": 1, "unit": "tsp", "required": true},
+      {"name": "chili powder", "quantity": 1, "unit": "tsp", "required": true},
+      {"name": "lettuce", "quantity": null, "unit": null, "required": false},
+      {"name": "tomatoes", "quantity": 2, "unit": "count", "required": false},
+      {"name": "cheddar cheese", "quantity": 2, "unit": "oz", "required": false}
+    ],
+    "instructions": "Brown ground beef with onion and garlic. Season with cumin and chili powder. Fill taco shells with meat. Top with lettuce, tomatoes, and cheese.",
+    "cuisine": "Mexican",
+    "prep_time_mins": 20
+  },
+  {
+    "title": "Lemon Garlic Salmon",
+    "ingredients": [
+      {"name": "salmon", "quantity": 1, "unit": "lbs", "required": true},
+      {"name": "lemon", "quantity": 2, "unit": "count", "required": true},
+      {"name": "garlic", "quantity": 4, "unit": "count", "required": true},
+      {"name": "butter", "quantity": 2, "unit": "tbsp", "required": true},
+      {"name": "dill", "quantity": null, "unit": null, "required": false},
+      {"name": "capers", "quantity": 1, "unit": "tbsp", "required": false}
+    ],
+    "instructions": "Season salmon with salt and pepper. Melt butter in oven-safe pan, add garlic. Sear salmon 3 mins, flip, add lemon slices. Bake at 400°F for 8 mins.",
+    "cuisine": "American",
+    "prep_time_mins": 20
+  },
+  {
+    "title": "Caprese Salad",
+    "ingredients": [
+      {"name": "tomatoes", "quantity": 3, "unit": "count", "required": true},
+      {"name": "mozzarella", "quantity": 8, "unit": "oz", "required": true},
+      {"name": "basil", "quantity": 15, "unit": "count", "required": true},
+      {"name": "olive oil", "quantity": 3, "unit": "tbsp", "required": true},
+      {"name": "balsamic glaze", "quantity": 2, "unit": "tbsp", "required": false},
+      {"name": "salt", "quantity": null, "unit": null, "required": true}
+    ],
+    "instructions": "Slice tomatoes and mozzarella. Alternate tomato and mozzarella slices on plate. Tuck basil leaves between. Drizzle with olive oil and balsamic. Season with salt.",
+    "cuisine": "Italian",
+    "prep_time_mins": 10
+  },
+  {
+    "title": "Pancakes",
+    "ingredients": [
+      {"name": "flour", "quantity": 1, "unit": "cups", "required": true},
+      {"name": "milk", "quantity": 1, "unit": "cups", "required": true},
+      {"name": "eggs", "quantity": 1, "unit": "count", "required": true},
+      {"name": "butter", "quantity": 2, "unit": "tbsp", "required": true},
+      {"name": "baking powder", "quantity": 2, "unit": "tsp", "required": true},
+      {"name": "sugar", "quantity": 2, "unit": "tbsp", "required": true},
+      {"name": "maple syrup", "quantity": null, "unit": null, "required": false}
+    ],
+    "instructions": "Whisk dry ingredients. Beat eggs with milk and melted butter. Combine wet and dry ingredients until just mixed. Cook on griddle until bubbles form, flip until golden.",
+    "cuisine": "American",
+    "prep_time_mins": 20
+  },
+  {
+    "title": "Minestrone Soup",
+    "ingredients": [
+      {"name": "kidney beans", "quantity": 1, "unit": "cups", "required": true},
+      {"name": "pasta", "quantity": 1, "unit": "cups", "required": true},
+      {"name": "tomatoes", "quantity": 2, "unit": "count", "required": true},
+      {"name": "zucchini", "quantity": 1, "unit": "count", "required": true},
+      {"name": "carrots", "quantity": 2, "unit": "count", "required": true},
+      {"name": "celery", "quantity": 2, "unit": "count", "required": true},
+      {"name": "onion", "quantity": 1, "unit": "count", "required": true},
+      {"name": "garlic", "quantity": 3, "unit": "count", "required": true},
+      {"name": "vegetable broth", "quantity": 4, "unit": "cups", "required": true},
+      {"name": "parmesan", "quantity": null, "unit": null, "required": false}
+    ],
+    "instructions": "Sauté aromatics. Add broth, tomatoes, and vegetables. Simmer 15 mins. Add beans and pasta, cook until pasta is tender. Serve with parmesan.",
+    "cuisine": "Italian",
+    "prep_time_mins": 40
+  },
+  {
+    "title": "Peanut Butter Banana Toast",
+    "ingredients": [
+      {"name": "bread", "quantity": 2, "unit": "count", "required": true},
+      {"name": "peanut butter", "quantity": 3, "unit": "tbsp", "required": true},
+      {"name": "banana", "quantity": 1, "unit": "count", "required": true},
+      {"name": "honey", "quantity": 1, "unit": "tbsp", "required": false}
+    ],
+    "instructions": "Toast bread. Spread peanut butter generously. Top with sliced banana and drizzle honey.",
+    "cuisine": "American",
+    "prep_time_mins": 5
+  },
+  {
+    "title": "Shakshuka",
+    "ingredients": [
+      {"name": "eggs", "quantity": 4, "unit": "count", "required": true},
+      {"name": "tomatoes", "quantity": 4, "unit": "count", "required": true},
+      {"name": "onion", "quantity": 1, "unit": "count", "required": true},
+      {"name": "bell pepper", "quantity": 1, "unit": "count", "required": true},
+      {"name": "garlic", "quantity": 3, "unit": "count", "required": true},
+      {"name": "cumin", "quantity": 1, "unit": "tsp", "required": true},
+      {"name": "paprika", "quantity": 1, "unit": "tsp", "required": true},
+      {"name": "feta cheese", "quantity": 2, "unit": "oz", "required": false},
+      {"name": "bread", "quantity": 2, "unit": "count", "required": false}
+    ],
+    "instructions": "Sauté onion, pepper, and garlic. Add tomatoes and spices, simmer 10 mins. Make wells, crack eggs into sauce. Cover and cook until whites are set. Top with feta.",
+    "cuisine": "Middle Eastern",
+    "prep_time_mins": 30
+  },
+  {
+    "title": "Caesar Salad",
+    "ingredients": [
+      {"name": "romaine lettuce", "quantity": 1, "unit": "count", "required": true},
+      {"name": "parmesan", "quantity": 3, "unit": "oz", "required": true},
+      {"name": "croutons", "quantity": 1, "unit": "cups", "required": true},
+      {"name": "lemon", "quantity": 1, "unit": "count", "required": true},
+      {"name": "garlic", "quantity": 2, "unit": "count", "required": true},
+      {"name": "olive oil", "quantity": 3, "unit": "tbsp", "required": true},
+      {"name": "anchovy", "quantity": 2, "unit": "count", "required": false}
+    ],
+    "instructions": "Make dressing by whisking garlic, lemon juice, and olive oil. Chop romaine, toss with dressing. Top with croutons and shaved parmesan.",
+    "cuisine": "American",
+    "prep_time_mins": 15
+  },
+  {
+    "title": "Butter Chicken",
+    "ingredients": [
+      {"name": "chicken breast", "quantity": 1.5, "unit": "lbs", "required": true},
+      {"name": "butter", "quantity": 3, "unit": "tbsp", "required": true},
+      {"name": "cream", "quantity": 0.5, "unit": "cups", "required": true},
+      {"name": "tomatoes", "quantity": 3, "unit": "count", "required": true},
+      {"name": "onion", "quantity": 1, "unit": "count", "required": true},
+      {"name": "garlic", "quantity": 4, "unit": "count", "required": true},
+      {"name": "ginger", "quantity": 1, "unit": "tsp", "required": true},
+      {"name": "garam masala", "quantity": 2, "unit": "tsp", "required": true},
+      {"name": "rice", "quantity": 2, "unit": "cups", "required": true}
+    ],
+    "instructions": "Marinate chicken in yogurt and spices. Cook in butter until browned. Blend tomato sauce with spices, simmer with chicken and cream. Serve over basmati rice.",
+    "cuisine": "Indian",
+    "prep_time_mins": 45
+  },
+  {
+    "title": "French Toast",
+    "ingredients": [
+      {"name": "bread", "quantity": 4, "unit": "count", "required": true},
+      {"name": "eggs", "quantity": 2, "unit": "count", "required": true},
+      {"name": "milk", "quantity": 0.25, "unit": "cups", "required": true},
+      {"name": "butter", "quantity": 2, "unit": "tbsp", "required": true},
+      {"name": "cinnamon", "quantity": 0.5, "unit": "tsp", "required": true},
+      {"name": "vanilla", "quantity": 0.5, "unit": "tsp", "required": false},
+      {"name": "maple syrup", "quantity": null, "unit": null, "required": false}
+    ],
+    "instructions": "Whisk eggs, milk, cinnamon, and vanilla. Dip bread slices in mixture. Cook in buttered pan over medium heat until golden on both sides. Serve with maple syrup.",
+    "cuisine": "French",
+    "prep_time_mins": 15
+  },
+  {
+    "title": "Hummus with Pita",
+    "ingredients": [
+      {"name": "chickpeas", "quantity": 2, "unit": "cups", "required": true},
+      {"name": "tahini", "quantity": 3, "unit": "tbsp", "required": true},
+      {"name": "lemon", "quantity": 2, "unit": "count", "required": true},
+      {"name": "garlic", "quantity": 3, "unit": "count", "required": true},
+      {"name": "olive oil", "quantity": 3, "unit": "tbsp", "required": true},
+      {"name": "pita bread", "quantity": 4, "unit": "count", "required": true},
+      {"name": "paprika", "quantity": null, "unit": null, "required": false}
+    ],
+    "instructions": "Blend chickpeas, tahini, lemon juice, garlic, and olive oil until smooth. Add water to adjust consistency. Serve in bowl drizzled with olive oil and paprika, with warm pita.",
+    "cuisine": "Middle Eastern",
+    "prep_time_mins": 15
+  },
+  {
+    "title": "Spaghetti Carbonara",
+    "ingredients": [
+      {"name": "pasta", "quantity": 8, "unit": "oz", "required": true},
+      {"name": "eggs", "quantity": 3, "unit": "count", "required": true},
+      {"name": "bacon", "quantity": 6, "unit": "oz", "required": true},
+      {"name": "parmesan", "quantity": 3, "unit": "oz", "required": true},
+      {"name": "garlic", "quantity": 2, "unit": "count", "required": false},
+      {"name": "black pepper", "quantity": null, "unit": null, "required": true}
+    ],
+    "instructions": "Cook pasta, reserve pasta water. Render bacon until crispy. Whisk eggs with parmesan and pepper. Off heat, combine hot pasta with bacon, then egg mixture, adding pasta water to create creamy sauce.",
+    "cuisine": "Italian",
+    "prep_time_mins": 25
+  },
+  {
+    "title": "Baked Potatoes",
+    "ingredients": [
+      {"name": "potatoes", "quantity": 4, "unit": "count", "required": true},
+      {"name": "butter", "quantity": 4, "unit": "tbsp", "required": true},
+      {"name": "sour cream", "quantity": 0.5, "unit": "cups", "required": false},
+      {"name": "cheddar cheese", "quantity": 4, "unit": "oz", "required": false},
+      {"name": "chives", "quantity": null, "unit": null, "required": false},
+      {"name": "bacon", "quantity": 4, "unit": "oz", "required": false}
+    ],
+    "instructions": "Pierce potatoes, rub with oil and salt. Bake at 425°F for 50-60 mins until tender. Cut open, top with butter, sour cream, cheese, chives, and bacon bits.",
+    "cuisine": "American",
+    "prep_time_mins": 60
+  },
+  {
+    "title": "Mushroom Risotto",
+    "ingredients": [
+      {"name": "arborio rice", "quantity": 1.5, "unit": "cups", "required": true},
+      {"name": "mushrooms", "quantity": 8, "unit": "oz", "required": true},
+      {"name": "onion", "quantity": 1, "unit": "count", "required": true},
+      {"name": "garlic", "quantity": 3, "unit": "count", "required": true},
+      {"name": "vegetable broth", "quantity": 4, "unit": "cups", "required": true},
+      {"name": "parmesan", "quantity": 3, "unit": "oz", "required": true},
+      {"name": "butter", "quantity": 3, "unit": "tbsp", "required": true},
+      {"name": "white wine", "quantity": 0.5, "unit": "cups", "required": false}
+    ],
+    "instructions": "Sauté onion, garlic, and mushrooms. Add rice and toast briefly. Add wine if using. Add hot broth ladle by ladle, stirring constantly until absorbed. Finish with butter and parmesan.",
+    "cuisine": "Italian",
+    "prep_time_mins": 40
+  },
+  {
+    "title": "Turkey Sandwich",
+    "ingredients": [
+      {"name": "bread", "quantity": 2, "unit": "count", "required": true},
+      {"name": "turkey", "quantity": 4, "unit": "oz", "required": true},
+      {"name": "lettuce", "quantity": 2, "unit": "count", "required": false},
+      {"name": "tomatoes", "quantity": 1, "unit": "count", "required": false},
+      {"name": "cheese", "quantity": 1, "unit": "oz", "required": false},
+      {"name": "mustard", "quantity": 1, "unit": "tbsp", "required": false},
+      {"name": "mayonnaise", "quantity": 1, "unit": "tbsp", "required": false}
+    ],
+    "instructions": "Spread condiments on bread. Layer turkey, cheese, lettuce, and tomato. Close sandwich and serve with chips or salad.",
+    "cuisine": "American",
+    "prep_time_mins": 5
+  },
+  {
+    "title": "Lentil Soup",
+    "ingredients": [
+      {"name": "lentils", "quantity": 1.5, "unit": "cups", "required": true},
+      {"name": "onion", "quantity": 1, "unit": "count", "required": true},
+      {"name": "carrots", "quantity": 2, "unit": "count", "required": true},
+      {"name": "garlic", "quantity": 4, "unit": "count", "required": true},
+      {"name": "cumin", "quantity": 2, "unit": "tsp", "required": true},
+      {"name": "vegetable broth", "quantity": 4, "unit": "cups", "required": true},
+      {"name": "lemon", "quantity": 1, "unit": "count", "required": true},
+      {"name": "spinach", "quantity": 2, "unit": "cups", "required": false}
+    ],
+    "instructions": "Sauté onion, carrots, and garlic. Add cumin. Add rinsed lentils and broth, simmer 25 mins. Stir in spinach until wilted. Finish with lemon juice.",
+    "cuisine": "Middle Eastern",
+    "prep_time_mins": 35
+  },
+  {
+    "title": "Cheese Omelette",
+    "ingredients": [
+      {"name": "eggs", "quantity": 3, "unit": "count", "required": true},
+      {"name": "cheddar cheese", "quantity": 2, "unit": "oz", "required": true},
+      {"name": "butter", "quantity": 1, "unit": "tbsp", "required": true},
+      {"name": "chives", "quantity": null, "unit": null, "required": false},
+      {"name": "salt", "quantity": null, "unit": null, "required": true}
+    ],
+    "instructions": "Beat eggs with salt. Melt butter over medium-high heat. Pour in eggs, swirl pan. When edges set, add cheese. Fold omelette in thirds and slide onto plate.",
+    "cuisine": "French",
+    "prep_time_mins": 10
+  },
+  {
+    "title": "Mango Salsa",
+    "ingredients": [
+      {"name": "mango", "quantity": 2, "unit": "count", "required": true},
+      {"name": "red onion", "quantity": 0.25, "unit": "count", "required": true},
+      {"name": "cilantro", "quantity": null, "unit": null, "required": true},
+      {"name": "jalapeño", "quantity": 1, "unit": "count", "required": false},
+      {"name": "lemon", "quantity": 1, "unit": "count", "required": true},
+      {"name": "tortilla chips", "quantity": null, "unit": null, "required": false}
+    ],
+    "instructions": "Dice mango, onion, and jalapeño. Chop cilantro. Combine with lime juice and salt. Serve with tortilla chips or as topping for fish or chicken.",
+    "cuisine": "Mexican",
+    "prep_time_mins": 15
+  }
+]
