@@ -295,3 +295,9 @@ pantryai/
 ## UI
 
 The frontend is a mobile-first PWA with a 428 px max-width, bottom tab navigation, and iOS safe-area insets. The design system uses OKLCH colour tokens — a deep plum primary (`oklch(0.48 0.14 270)`) and sage green accent (`oklch(0.58 0.12 155)`) — with a system font stack (`-apple-system`, `SF Pro Text`, `system-ui`) and a native iOS feel throughout. All touch targets are ≥44 px. Reduced-motion is respected globally.
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).
