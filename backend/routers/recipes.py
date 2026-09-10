@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Request
-from services.auth import get_current_user
+from services.auth import get_current_user, require_admin
 from services.supabase_client import get_admin_client
 from services.rate_limiter import limiter
 from agents.recipe_agent import suggest_recipes, generate_recipe
@@ -58,7 +58,7 @@ async def get_generated_recipe(
 @limiter.limit("60/hour")
 async def get_eval(
     request: Request,
-    user_id: str = Depends(get_current_user),
+    user_id: str = Depends(require_admin),
 ):
     supabase = get_admin_client()
     logs = supabase.table("recipe_suggestion_log").select("*").execute().data

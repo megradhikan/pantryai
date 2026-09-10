@@ -17,6 +17,18 @@ def _get_jwks_client() -> PyJWKClient:
     return _jwks_client
 
 
+def _verify(authorization: str) -> dict:
+    token = authorization.removeprefix("Bearer ").strip()
+    client = _get_jwks_client()
+    signing_key = client.get_signing_key_from_jwt(token)
+    return pyjwt.decode(
+        token,
+        signing_key.key,
+        algorithms=["ES256"],
+        options={"verify_aud": False},
+    )
+
+
 def get_current_user(authorization: str = Header(...)) -> str:
     """
     Verifies Supabase-issued JWT from Authorization: Bearer <token> header.
@@ -24,18 +36,36 @@ def get_current_user(authorization: str = Header(...)) -> str:
     Raises HTTP 401 on any failure.
     """
     try:
-        token = authorization.removeprefix("Bearer ").strip()
-        client = _get_jwks_client()
-        signing_key = client.get_signing_key_from_jwt(token)
-        payload = pyjwt.decode(
-            token,
-            signing_key.key,
-            algorithms=["ES256"],
-            options={"verify_aud": False},
-        )
+        payload = _verify(authorization)
         user_id = payload.get("sub")
         if not user_id:
             raise HTTPException(status_code=401, detail="Unauthorized")
         return user_id
+    except HTTPException:
+        raise
     except Exception:
         raise HTTPException(status_code=401, detail="Unauthorized")
+
+
+def require_admin(authorization: str = Header(...)) -> str:
+    """
+    Verifies the JWT and additionally requires the token's email to match
+    ADMIN_EMAIL. Used for aggregate/cross-user endpoints that must not be
+    reachable by ordinary authenticated users. Raises 401 if unauthenticated,
+    403 if authenticated but not the admin.
+    """
+    try:
+        payload = _verify(authorization)
+        user_id = payload.get("sub")
+        email = payload.get("email")
+        if not user_id:
+            raise HTTPException(status_code=401, detail="Unauthorized")
+    except HTTPException:
+        raise
+    except Exception:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    admin_email = os.environ.get("ADMIN_EMAIL")
+    if not admin_email or not email or email.lower() != admin_email.lower():
+        raise HTTPException(status_code=403, detail="Forbidden")
+    return user_id

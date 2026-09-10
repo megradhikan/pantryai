@@ -4,6 +4,10 @@
 
 PantryAI is a mobile-first web app for college students who want to waste less food. Scan a receipt after a grocery run, and the app builds your inventory automatically: item names normalized, categories assigned, expiry dates estimated. From there it surfaces what's expiring, suggests recipes that use what you already have (prioritizing items close to expiry), and builds a shopping list for anything missing.
 
+<p align="center">
+  <img src="docs/screenshots/demo.gif" width="260" alt="PantryAI walkthrough: sign in, pantry dashboard, receipt scan review, AI recipe suggestion" />
+</p>
+
 ---
 
 ## Screenshots
