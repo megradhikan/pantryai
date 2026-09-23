@@ -34,9 +34,11 @@ export default function DashboardPage() {
   const [form, setForm] = useState({ name: "", category: "Produce", quantity: "1", unit: "" });
   const [newItemId, setNewItemId] = useState<string | null>(null);
   const [finishingId, setFinishingId] = useState<string | null>(null);
+  const [greetingText, setGreetingText] = useState("Hello");
   const router = useRouter();
 
   useEffect(() => {
+    setGreetingText(greeting());
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_ev, session) => {
       if (!session) router.push("/");
       else load();
@@ -97,7 +99,7 @@ export default function DashboardPage() {
             <div>
               <h1 className="page-title">My Pantry</h1>
               <p className="page-subtitle">
-                {greeting()} · {items.length} items
+                {greetingText} · {items.length} items
                 {expiring > 0 && (
                   <span style={{ color: "var(--status-expiring)", fontWeight: 600 }}>
                     {" · "}{expiring} expiring

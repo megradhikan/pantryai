@@ -23,7 +23,7 @@ export default function ReceiptsPage() {
   const [scanMsgIdx, setScanMsgIdx] = useState(0);
   const [extractedItems, setExtractedItems] = useState<ExtractedItem[] | null>(null);
   const [pendingReceiptId, setPendingReceiptId] = useState<string | null>(null);
-  const [purchaseDate, setPurchaseDate] = useState(new Date().toISOString().split("T")[0]);
+  const [purchaseDate, setPurchaseDate] = useState("");
   const [error, setError] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -36,6 +36,7 @@ export default function ReceiptsPage() {
   }, [uploading]);
 
   useEffect(() => {
+    setPurchaseDate(new Date().toISOString().split("T")[0]);
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) router.push("/");
       else loadReceipts();
