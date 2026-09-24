@@ -2,7 +2,7 @@ import json
 import re
 import os
 import google.generativeai as genai
-from services.embeddings import embed_text
+from services.recipe_matching import match_recipes
 from services.supabase_client import get_admin_client
 
 SYSTEM_PROMPT = """You are a recipe recommender for a pantry management app.
@@ -78,32 +78,9 @@ def suggest_recipes(inventory: list[dict]) -> list[dict]:
     if not active_items:
         return []
 
-    query_text = " ".join(i["name"] for i in active_items)
-    query_embedding = embed_text(query_text)
-
     supabase = get_admin_client()
-    candidates = supabase.rpc(
-        "match_recipes",
-        {"query_embedding": query_embedding, "match_count": 20},
-    ).execute().data
-
-    inventory_json = json.dumps(
-        [{"name": i["name"], "category": i["category"], "status": i["status"]} for i in active_items]
-    )
-    candidates_json = json.dumps(
-        [
-            {"recipe_id": str(c["id"]), "title": c["title"], "ingredients": c["ingredients"]}
-            for c in candidates
-        ]
-    )
-
-    model = _get_model()
-    response = model.generate_content(
-        f"Inventory:\n{inventory_json}\n\nCandidates:\n{candidates_json}"
-    )
-    raw = response.text.strip()
-    parsed = _extract_json(raw)
-    return parsed.get("suggestions", [])
+    recipes = supabase.table("recipes").select("id, title, ingredients").execute().data
+    return match_recipes(active_items, recipes)
 
 
 def generate_recipe(inventory: list[dict]) -> dict | None:
