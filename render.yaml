@@ -18,7 +18,7 @@ services:
       - key: ADMIN_EMAIL
         sync: false
       - key: ALLOWED_ORIGINS
-        value: https://pantryai-pi.vercel.app
+        value: https://pantryai-pi.vercel.app,https://pantryai-radhikan-2852s-projects.vercel.app
       - key: VAPID_PUBLIC_KEY
         sync: false
       - key: VAPID_PRIVATE_KEY

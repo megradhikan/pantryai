@@ -22,6 +22,10 @@ ALLOWED_ORIGINS = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
+    # Vercel gives this project both a stable team alias and immutable
+    # deployment URLs. Allow only URLs belonging to this PantryAI project so
+    # opening a deployment from the Vercel dashboard does not fail preflight.
+    allow_origin_regex=r"https://pantryai(?:-[a-z0-9]+)?-radhikan-2852s-projects\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
