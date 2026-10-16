@@ -27,7 +27,7 @@ PantryAI is a mobile-first web app for college students who want to waste less f
 | **Sign In** | Supabase Auth — email/password, tab-switched sign-up |
 | **My Pantry** | 34 items sorted by estimated expiry. Items within 2 days of expiry get an amber tinted card and a "3 expiring" count in the header (computed server-side from purchase date + per-category shelf-life constants, never stored). Filter chips scope the view to Expiring / Low / Done. |
 | **Scan Receipt** | After uploading a real grocery receipt: Tesseract OCR extracts the text, Gemini 2.5 Flash parses it into 16 structured items with normalized names (`CHKN BRST` → `Chicken Breast`) and auto-assigned categories. The user can edit any field or remove rows before confirming. |
-| **Recipes** | Gemini 2.5 Flash generates a custom recipe from the current pantry ("Hearty Baked Chicken and Vegetable Pasta", 25 min). Green dots = ingredients already in pantry; red dots = items to buy. A separate "Match recipes" button runs the RAG pipeline instead. |
+| **Recipes** | Gemini 2.5 Flash generates a custom recipe from the current pantry ("Hearty Baked Chicken and Vegetable Pasta", 25 min). Green dots = ingredients already in pantry; red dots = items to buy. A separate "Match recipes" button runs the pantry matcher instead. |
 
 
 ---
@@ -43,12 +43,14 @@ PantryAI is a mobile-first web app for college students who want to waste less f
 5. On confirm, items are upserted into inventory with expiry dates estimated per category (Protein: 3 days, Produce: 5 days, Dairy: 10 days, Frozen: 90 days, etc.)
 6. **RapidFuzz** fuzzy-matches new items against existing inventory (≥85% score) to accumulate quantity instead of creating duplicates
 
-### Recipe suggestions — RAG pipeline
+### Recipe suggestions
 
-1. Active pantry items are joined into a query string and embedded with **`all-MiniLM-L6-v2`** (384 dimensions, via `sentence-transformers`)
-2. **pgvector** runs a cosine-similarity search across the recipe corpus (ivfflat index), returning the top 20 candidates
-3. **Gemini 2.5 Flash** re-ranks the 20 candidates against the full inventory, computing a `match_score` (fraction of required ingredients present), applying fuzzy ingredient matching (`heavy cream` matches `cream`), and prioritising recipes that use `expiring_soon` items
+1. Active pantry items (not finished or expired) are matched against every recipe in the seeded corpus by `match_recipes()` in `backend/services/recipe_matching.py`
+2. Ingredient names are compared by normalized tokens (plurals stripped, subset match such as `chicken` and `chicken breast`) with a fuzzy fallback at a 0.84 similarity ratio
+3. Each recipe gets a `match_score` (fraction of required ingredients present), and ties are broken by use of `expiring_soon` items, then by number of pantry items used
 4. Returns the top 5 suggestions with per-recipe lists of matched pantry items and missing ingredients
+
+The repo also contains a pgvector `match_recipes` SQL function and recipe embeddings (`all-MiniLM-L6-v2`), but the suggestion endpoint does not call them. The embeddings are only used by the evaluation below. An earlier version used vector search with a Gemini re-rank. It was replaced by the lexical matcher in commit `82ef5e1` after it crashed on Render.
 
 ### AI recipe generation
 
@@ -149,13 +151,36 @@ Row-Level Security is enforced on all six user-data tables. Ownership checks on 
 
 **Expiry estimation, not tracking.** Real expiry dates require user input on every item. Instead, the app uses per-category shelf-life constants (backed by FDA guidelines) applied from purchase date. This means zero friction at scan time — expiry is always populated.
 
-**LLM as parser, not gatekeeper.** Gemini only touches the receipt OCR text and recipe ranking. The rest of the pipeline (upsert logic, status computation, ownership checks) is deterministic Python. The LLM is isolated to a single agent module per domain so it can be swapped or tested independently.
+**LLM as parser, not gatekeeper.** Gemini only touches the receipt OCR text and recipe generation. The rest of the pipeline (upsert logic, status computation, ownership checks) is deterministic Python. The LLM is isolated to a single agent module per domain so it can be swapped or tested independently.
 
-**RAG before generation.** Recipe matching runs against a seeded corpus first (vector search → LLM re-rank), which is faster and more predictable. Generation (full Gemini creative pass) is a separate button the user explicitly triggers.
+**Matching before generation.** Recipe matching runs against a seeded corpus first with a deterministic matcher, which is faster and more predictable. Generation (full Gemini creative pass) is a separate button the user explicitly triggers.
 
 **Fuzzy dedup on upsert.** When a receipt adds `Chicken Breast` and the pantry already has `Chicken Brst`, RapidFuzz catches the match at ≥85 score and accumulates quantity rather than creating a duplicate row. This keeps the inventory accurate across multiple receipt scans.
 
 ---
+
+## Evaluation
+
+Run with `python backend/scripts/run_evals.py` from the repo root (needs `sentence-transformers` and `numpy` from `backend/requirements.txt`; no API key, no network calls after the embedding model is downloaded). Raw output is written to `backend/eval/results/recipe_matching.json`.
+
+### Recipe matching
+
+Sample: 20 pantry scenarios against the 30 seeded recipes. Labels are in `backend/eval/recipes/scenarios.json`. A recipe counts as relevant if every required ingredient is in the pantry (salt and pepper assumed). I wrote the labels by hand from the ingredient lists. They have not been reviewed by anyone else.
+
+| Ranker | Precision@5 | Recall@5 | Top-1 relevant |
+|---|---|---|---|
+| Lexical matcher (what the app runs) | 0.37 | 0.99 | 0.95 |
+| Embedding retrieval only (MiniLM cosine, exact) | 0.29 | 0.85 | 0.90 |
+| Embedding top 15, re-ranked by the lexical matcher | 0.33 | 0.92 | 1.00 |
+
+Most scenarios have fewer than 5 relevant recipes, so precision@5 cannot reach 1.0. The best possible value on this set is 0.38.
+
+Limits:
+- 20 scenarios and a 30-recipe corpus is small. Differences of one or two scenarios move these numbers.
+- The labeling rule is close to what the lexical matcher scores, so its numbers favor it. Treat the comparison as a sanity check, not a benchmark.
+- There is no LLM re-rank in the current code, so none is evaluated. The "embedding then re-rank" row uses the lexical matcher as the second stage.
+- Known miss: the lexical matcher does not treat `Spaghetti` as `pasta`, so in the Italian scenario Pasta Marinara ranks second, behind Tomato Basil Bruschetta, which is not relevant there (`ingredient_matches('pasta', 'Spaghetti')` returns False).
+- Receipt parsing has not been evaluated yet.
 
 ## Local setup
 
@@ -248,7 +273,7 @@ pantryai/
 │   ├── main.py                   # FastAPI app, CORS, rate limit middleware
 │   ├── agents/
 │   │   ├── receipt_agent.py      # Tesseract OCR → Gemini parse
-│   │   ├── recipe_agent.py       # MiniLM embed → pgvector → Gemini re-rank
+│   │   ├── recipe_agent.py       # loads recipes, calls services/recipe_matching.py; Gemini recipe generation
 │   │   ├── inventory_agent.py    # Expiry estimation, fuzzy dedup, status compute
 │   │   └── shopping_agent.py
 │   ├── routers/
@@ -287,7 +312,7 @@ pantryai/
 | `POST` | `/api/inventory/manual` | Add item without a receipt |
 | `PATCH` | `/api/inventory/:id` | Update quantity, unit, or is\_finished |
 | `DELETE` | `/api/inventory/:id` | Remove item |
-| `POST` | `/api/recipes/suggest` | RAG pipeline: returns top-5 matched recipes |
+| `POST` | `/api/recipes/suggest` | Returns top-5 matched recipes |
 | `POST` | `/api/recipes/generate` | Gemini generates a custom recipe from current pantry |
 | `GET` | `/api/shopping/` | List shopping lists |
 | `POST` | `/api/shopping/` | Create shopping list from missing ingredients |

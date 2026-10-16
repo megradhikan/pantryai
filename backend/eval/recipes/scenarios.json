@@ -1,0 +1,25 @@
+{
+  "labeling_rule": "A recipe is relevant if every ingredient marked required in backend/data/recipes.json is covered by the pantry, treating salt and black pepper as always on hand. Labels were written by hand from the ingredient lists, not produced by the matcher.",
+  "scenarios": [
+    {"id": "breakfast", "pantry": ["Eggs", "Butter", "Whole Milk", "Sliced Bread", "Cheddar Cheese", "Ground Cinnamon", "Bananas"], "relevant": ["Classic Scrambled Eggs", "Banana Smoothie", "Grilled Cheese Sandwich", "French Toast", "Cheese Omelette"]},
+    {"id": "stir-fry-night", "pantry": ["Chicken Breast Boneless", "Broccoli Crowns", "Soy Sauce", "Garlic", "Jasmine Rice", "Eggs"], "relevant": ["Chicken Stir Fry", "Fried Rice"]},
+    {"id": "italian", "pantry": ["Spaghetti", "Roma Tomatoes", "Garlic", "Olive Oil", "Fresh Basil", "Parmesan Cheese", "Eggs", "Bacon"], "relevant": ["Pasta Marinara", "Spaghetti Carbonara"]},
+    {"id": "mediterranean", "pantry": ["Cucumber", "Tomatoes", "Red Onion", "Feta Cheese", "Olive Oil", "Lemons", "Chickpeas", "Tahini", "Garlic", "Pita Bread"], "relevant": ["Greek Salad", "Hummus with Pita"]},
+    {"id": "mexican", "pantry": ["Ground Beef", "Taco Shells", "Yellow Onion", "Garlic", "Cumin", "Chili Powder", "Cheddar Cheese", "Flour Tortillas", "Chicken Breast", "Tomatoes"], "relevant": ["Beef Tacos", "Chicken Quesadillas"]},
+    {"id": "baking-staples", "pantry": ["All Purpose Flour", "Milk", "Eggs", "Butter", "Baking Powder", "Sugar", "Maple Syrup"], "relevant": ["Pancakes", "Classic Scrambled Eggs"]},
+    {"id": "soup-veg", "pantry": ["Carrots", "Celery", "Yellow Onion", "Russet Potatoes", "Vegetable Broth", "Garlic", "Butter"], "relevant": ["Vegetable Soup", "Baked Potatoes"]},
+    {"id": "sandwich", "pantry": ["Bread", "Sliced Turkey", "Lettuce", "Cheddar Cheese", "Butter", "Mayonnaise", "Avocado", "Lemon"], "relevant": ["Turkey Sandwich", "Grilled Cheese Sandwich", "Avocado Toast"]},
+    {"id": "salmon", "pantry": ["Salmon Fillet", "Lemon", "Garlic", "Butter", "White Rice", "Soy Sauce", "Dill"], "relevant": ["Lemon Garlic Salmon"]},
+    {"id": "lentils", "pantry": ["Lentils", "Onion", "Carrots", "Garlic", "Cumin", "Vegetable Broth", "Lemon", "Spinach"], "relevant": ["Lentil Soup"]},
+    {"id": "indian", "pantry": ["Chicken Breast", "Butter", "Heavy Cream", "Tomatoes", "Onion", "Garlic", "Ginger", "Garam Masala", "Basmati Rice"], "relevant": ["Butter Chicken"]},
+    {"id": "risotto", "pantry": ["Arborio Rice", "Mushrooms", "Onion", "Garlic", "Vegetable Broth", "Parmesan", "Butter", "White Wine"], "relevant": ["Mushroom Risotto"]},
+    {"id": "oats", "pantry": ["Rolled Oats", "Milk", "Greek Yogurt", "Banana", "Honey", "Chia Seeds"], "relevant": ["Overnight Oats", "Banana Smoothie"]},
+    {"id": "two-items", "pantry": ["Eggs", "Butter"], "relevant": ["Classic Scrambled Eggs"]},
+    {"id": "toast-snacks", "pantry": ["Bread", "Peanut Butter", "Banana", "Honey", "Avocado", "Lemon"], "relevant": ["Peanut Butter Banana Toast", "Avocado Toast"]},
+    {"id": "salads", "pantry": ["Romaine Lettuce", "Parmesan", "Croutons", "Lemon", "Garlic", "Olive Oil", "Tomatoes", "Fresh Mozzarella", "Basil"], "relevant": ["Caesar Salad", "Caprese Salad"]},
+    {"id": "messy-names", "pantry": ["Org Roma Tomatoes", "Fresh Mozzarella", "Basil", "Extra Virgin Olive Oil", "Baguette Bread", "Garlic Cloves"], "relevant": ["Caprese Salad", "Tomato Basil Bruschetta"]},
+    {"id": "potato-night", "pantry": ["Russet Potatoes", "Butter", "Sour Cream", "Cheddar Cheese", "Bacon", "Eggs", "Penne Pasta"], "relevant": ["Baked Potatoes", "Classic Scrambled Eggs", "Cheese Omelette"]},
+    {"id": "mango", "pantry": ["Mango", "Red Onion", "Cilantro", "Lemon", "Jalapeno", "Tortilla Chips"], "relevant": ["Mango Salsa"]},
+    {"id": "shakshuka", "pantry": ["Eggs", "Tomatoes", "Yellow Onion", "Bell Pepper", "Garlic", "Cumin", "Paprika", "Bread", "Feta Cheese"], "relevant": ["Shakshuka"]}
+  ]
+}

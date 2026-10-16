@@ -1,0 +1,968 @@
+{
+  "eval": "recipe_matching",
+  "run_at": "2026-10-16T17:42:42+00:00",
+  "n_scenarios": 20,
+  "n_recipes_in_corpus": 30,
+  "k": 5,
+  "hybrid_pool_size": 15,
+  "embedding_model": "all-MiniLM-L6-v2",
+  "labeling_rule": "A recipe is relevant if every ingredient marked required in backend/data/recipes.json is covered by the pantry, treating salt and black pepper as always on hand. Labels were written by hand from the ingredient lists, not produced by the matcher.",
+  "summary": {
+    "lexical": {
+      "precision_at_5": 0.37,
+      "recall_at_5": 0.99,
+      "hit_at_1": 0.95
+    },
+    "embedding": {
+      "precision_at_5": 0.29,
+      "recall_at_5": 0.8533,
+      "hit_at_1": 0.9
+    },
+    "hybrid": {
+      "precision_at_5": 0.33,
+      "recall_at_5": 0.915,
+      "hit_at_1": 1.0
+    },
+    "max_achievable_precision_at_5": 0.38
+  },
+  "per_scenario": [
+    {
+      "id": "breakfast",
+      "pantry_size": 7,
+      "relevant": [
+        "Banana Smoothie",
+        "Cheese Omelette",
+        "Classic Scrambled Eggs",
+        "French Toast",
+        "Grilled Cheese Sandwich"
+      ],
+      "lexical": {
+        "top5": [
+          "French Toast",
+          "Grilled Cheese Sandwich",
+          "Peanut Butter Banana Toast",
+          "Banana Smoothie",
+          "Cheese Omelette"
+        ],
+        "precision": 0.8,
+        "recall": 0.8,
+        "hit_at_1": 1.0,
+        "max_precision": 1.0
+      },
+      "embedding": {
+        "top5": [
+          "French Toast",
+          "Peanut Butter Banana Toast",
+          "Butter Chicken",
+          "Beef Tacos",
+          "Grilled Cheese Sandwich"
+        ],
+        "precision": 0.4,
+        "recall": 0.4,
+        "hit_at_1": 1.0,
+        "max_precision": 1.0
+      },
+      "hybrid": {
+        "top5": [
+          "French Toast",
+          "Grilled Cheese Sandwich",
+          "Peanut Butter Banana Toast",
+          "Banana Smoothie",
+          "Cheese Omelette"
+        ],
+        "precision": 0.8,
+        "recall": 0.8,
+        "hit_at_1": 1.0,
+        "max_precision": 1.0
+      }
+    },
+    {
+      "id": "stir-fry-night",
+      "pantry_size": 6,
+      "relevant": [
+        "Chicken Stir Fry",
+        "Fried Rice"
+      ],
+      "lexical": {
+        "top5": [
+          "Chicken Stir Fry",
+          "Fried Rice",
+          "Butter Chicken",
+          "Chicken Quesadillas",
+          "Classic Scrambled Eggs"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "embedding": {
+        "top5": [
+          "Butter Chicken",
+          "Chicken Stir Fry",
+          "Fried Rice",
+          "Hummus with Pita",
+          "Lemon Garlic Salmon"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 0.0,
+        "max_precision": 0.4
+      },
+      "hybrid": {
+        "top5": [
+          "Chicken Stir Fry",
+          "Fried Rice",
+          "Butter Chicken",
+          "Chicken Quesadillas",
+          "Shakshuka"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      }
+    },
+    {
+      "id": "italian",
+      "pantry_size": 8,
+      "relevant": [
+        "Pasta Marinara",
+        "Spaghetti Carbonara"
+      ],
+      "lexical": {
+        "top5": [
+          "Tomato Basil Bruschetta",
+          "Pasta Marinara",
+          "Spaghetti Carbonara",
+          "Caprese Salad",
+          "Caesar Salad"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 0.0,
+        "max_precision": 0.4
+      },
+      "embedding": {
+        "top5": [
+          "Pasta Marinara",
+          "Spaghetti Carbonara",
+          "Greek Salad",
+          "Caesar Salad",
+          "Minestrone Soup"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "hybrid": {
+        "top5": [
+          "Pasta Marinara",
+          "Spaghetti Carbonara",
+          "Caesar Salad",
+          "Fried Rice",
+          "Shakshuka"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      }
+    },
+    {
+      "id": "mediterranean",
+      "pantry_size": 10,
+      "relevant": [
+        "Greek Salad",
+        "Hummus with Pita"
+      ],
+      "lexical": {
+        "top5": [
+          "Greek Salad",
+          "Hummus with Pita",
+          "Tomato Basil Bruschetta",
+          "Pasta Marinara",
+          "Avocado Toast"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "embedding": {
+        "top5": [
+          "Greek Salad",
+          "Hummus with Pita",
+          "Minestrone Soup",
+          "Beef Tacos",
+          "Caesar Salad"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "hybrid": {
+        "top5": [
+          "Greek Salad",
+          "Hummus with Pita",
+          "Pasta Marinara",
+          "Caesar Salad",
+          "Lemon Garlic Salmon"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      }
+    },
+    {
+      "id": "mexican",
+      "pantry_size": 10,
+      "relevant": [
+        "Beef Tacos",
+        "Chicken Quesadillas"
+      ],
+      "lexical": {
+        "top5": [
+          "Beef Tacos",
+          "Chicken Quesadillas",
+          "Shakshuka",
+          "Pasta Marinara",
+          "Butter Chicken"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "embedding": {
+        "top5": [
+          "Beef Tacos",
+          "Minestrone Soup",
+          "Chicken Quesadillas",
+          "Greek Salad",
+          "Lentil Soup"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "hybrid": {
+        "top5": [
+          "Beef Tacos",
+          "Chicken Quesadillas",
+          "Shakshuka",
+          "Butter Chicken",
+          "Lentil Soup"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      }
+    },
+    {
+      "id": "baking-staples",
+      "pantry_size": 7,
+      "relevant": [
+        "Classic Scrambled Eggs",
+        "Pancakes"
+      ],
+      "lexical": {
+        "top5": [
+          "Pancakes",
+          "Classic Scrambled Eggs",
+          "French Toast",
+          "Cheese Omelette",
+          "Baked Potatoes"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "embedding": {
+        "top5": [
+          "Pancakes",
+          "French Toast",
+          "Classic Scrambled Eggs",
+          "Butter Chicken",
+          "Greek Salad"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "hybrid": {
+        "top5": [
+          "Pancakes",
+          "Classic Scrambled Eggs",
+          "French Toast",
+          "Cheese Omelette",
+          "Banana Smoothie"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      }
+    },
+    {
+      "id": "soup-veg",
+      "pantry_size": 7,
+      "relevant": [
+        "Baked Potatoes",
+        "Vegetable Soup"
+      ],
+      "lexical": {
+        "top5": [
+          "Vegetable Soup",
+          "Baked Potatoes",
+          "Lentil Soup",
+          "Mushroom Risotto",
+          "Minestrone Soup"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "embedding": {
+        "top5": [
+          "Vegetable Soup",
+          "Lentil Soup",
+          "Minestrone Soup",
+          "Greek Salad",
+          "Fried Rice"
+        ],
+        "precision": 0.2,
+        "recall": 0.5,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "hybrid": {
+        "top5": [
+          "Vegetable Soup",
+          "Baked Potatoes",
+          "Lentil Soup",
+          "Mushroom Risotto",
+          "Minestrone Soup"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      }
+    },
+    {
+      "id": "sandwich",
+      "pantry_size": 8,
+      "relevant": [
+        "Avocado Toast",
+        "Grilled Cheese Sandwich",
+        "Turkey Sandwich"
+      ],
+      "lexical": {
+        "top5": [
+          "Turkey Sandwich",
+          "Avocado Toast",
+          "Grilled Cheese Sandwich",
+          "Peanut Butter Banana Toast",
+          "Baked Potatoes"
+        ],
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.6
+      },
+      "embedding": {
+        "top5": [
+          "Turkey Sandwich",
+          "Caesar Salad",
+          "Greek Salad",
+          "Lemon Garlic Salmon",
+          "Beef Tacos"
+        ],
+        "precision": 0.2,
+        "recall": 0.3333333333333333,
+        "hit_at_1": 1.0,
+        "max_precision": 0.6
+      },
+      "hybrid": {
+        "top5": [
+          "Turkey Sandwich",
+          "Baked Potatoes",
+          "Lemon Garlic Salmon",
+          "Caesar Salad",
+          "Hummus with Pita"
+        ],
+        "precision": 0.2,
+        "recall": 0.3333333333333333,
+        "hit_at_1": 1.0,
+        "max_precision": 0.6
+      }
+    },
+    {
+      "id": "salmon",
+      "pantry_size": 7,
+      "relevant": [
+        "Lemon Garlic Salmon"
+      ],
+      "lexical": {
+        "top5": [
+          "Lemon Garlic Salmon",
+          "Fried Rice",
+          "Chicken Stir Fry",
+          "Baked Potatoes",
+          "Butter Chicken"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      },
+      "embedding": {
+        "top5": [
+          "Lemon Garlic Salmon",
+          "Butter Chicken",
+          "Fried Rice",
+          "Caesar Salad",
+          "Chicken Stir Fry"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      },
+      "hybrid": {
+        "top5": [
+          "Lemon Garlic Salmon",
+          "Fried Rice",
+          "Chicken Stir Fry",
+          "Butter Chicken",
+          "Caesar Salad"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      }
+    },
+    {
+      "id": "lentils",
+      "pantry_size": 8,
+      "relevant": [
+        "Lentil Soup"
+      ],
+      "lexical": {
+        "top5": [
+          "Lentil Soup",
+          "Vegetable Soup",
+          "Beef Tacos",
+          "Lemon Garlic Salmon",
+          "Mango Salsa"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      },
+      "embedding": {
+        "top5": [
+          "Lentil Soup",
+          "Vegetable Soup",
+          "Minestrone Soup",
+          "Lemon Garlic Salmon",
+          "Caesar Salad"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      },
+      "hybrid": {
+        "top5": [
+          "Lentil Soup",
+          "Vegetable Soup",
+          "Beef Tacos",
+          "Lemon Garlic Salmon",
+          "Mango Salsa"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      }
+    },
+    {
+      "id": "indian",
+      "pantry_size": 9,
+      "relevant": [
+        "Butter Chicken"
+      ],
+      "lexical": {
+        "top5": [
+          "Butter Chicken",
+          "Chicken Stir Fry",
+          "Fried Rice",
+          "Lemon Garlic Salmon",
+          "Pasta Marinara"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      },
+      "embedding": {
+        "top5": [
+          "Butter Chicken",
+          "Chicken Stir Fry",
+          "Hummus with Pita",
+          "Fried Rice",
+          "Greek Salad"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      },
+      "hybrid": {
+        "top5": [
+          "Butter Chicken",
+          "Chicken Stir Fry",
+          "Fried Rice",
+          "Lemon Garlic Salmon",
+          "Pasta Marinara"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      }
+    },
+    {
+      "id": "risotto",
+      "pantry_size": 8,
+      "relevant": [
+        "Mushroom Risotto"
+      ],
+      "lexical": {
+        "top5": [
+          "Mushroom Risotto",
+          "Fried Rice",
+          "Vegetable Soup",
+          "Lemon Garlic Salmon",
+          "Baked Potatoes"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      },
+      "embedding": {
+        "top5": [
+          "Mushroom Risotto",
+          "Minestrone Soup",
+          "Lentil Soup",
+          "Butter Chicken",
+          "Vegetable Soup"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      },
+      "hybrid": {
+        "top5": [
+          "Mushroom Risotto",
+          "Fried Rice",
+          "Vegetable Soup",
+          "Lemon Garlic Salmon",
+          "Butter Chicken"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      }
+    },
+    {
+      "id": "oats",
+      "pantry_size": 6,
+      "relevant": [
+        "Banana Smoothie",
+        "Overnight Oats"
+      ],
+      "lexical": {
+        "top5": [
+          "Overnight Oats",
+          "Banana Smoothie",
+          "Peanut Butter Banana Toast",
+          "French Toast",
+          "Pancakes"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "embedding": {
+        "top5": [
+          "Overnight Oats",
+          "Banana Smoothie",
+          "Greek Salad",
+          "Butter Chicken",
+          "Hummus with Pita"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "hybrid": {
+        "top5": [
+          "Overnight Oats",
+          "Banana Smoothie",
+          "Peanut Butter Banana Toast",
+          "French Toast",
+          "Butter Chicken"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      }
+    },
+    {
+      "id": "two-items",
+      "pantry_size": 2,
+      "relevant": [
+        "Classic Scrambled Eggs"
+      ],
+      "lexical": {
+        "top5": [
+          "Classic Scrambled Eggs",
+          "Cheese Omelette",
+          "Baked Potatoes",
+          "French Toast",
+          "Pancakes"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      },
+      "embedding": {
+        "top5": [
+          "Classic Scrambled Eggs",
+          "Avocado Toast",
+          "French Toast",
+          "Pancakes",
+          "Cheese Omelette"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      },
+      "hybrid": {
+        "top5": [
+          "Classic Scrambled Eggs",
+          "Cheese Omelette",
+          "Baked Potatoes",
+          "French Toast",
+          "Pancakes"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      }
+    },
+    {
+      "id": "toast-snacks",
+      "pantry_size": 6,
+      "relevant": [
+        "Avocado Toast",
+        "Peanut Butter Banana Toast"
+      ],
+      "lexical": {
+        "top5": [
+          "Peanut Butter Banana Toast",
+          "Avocado Toast",
+          "Grilled Cheese Sandwich",
+          "Banana Smoothie",
+          "Lemon Garlic Salmon"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "embedding": {
+        "top5": [
+          "Peanut Butter Banana Toast",
+          "Butter Chicken",
+          "Avocado Toast",
+          "Hummus with Pita",
+          "Lemon Garlic Salmon"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "hybrid": {
+        "top5": [
+          "Peanut Butter Banana Toast",
+          "Avocado Toast",
+          "Banana Smoothie",
+          "Lemon Garlic Salmon",
+          "Hummus with Pita"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      }
+    },
+    {
+      "id": "salads",
+      "pantry_size": 9,
+      "relevant": [
+        "Caesar Salad",
+        "Caprese Salad"
+      ],
+      "lexical": {
+        "top5": [
+          "Caesar Salad",
+          "Caprese Salad",
+          "Tomato Basil Bruschetta",
+          "Pasta Marinara",
+          "Greek Salad"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "embedding": {
+        "top5": [
+          "Caesar Salad",
+          "Greek Salad",
+          "Pasta Marinara",
+          "Minestrone Soup",
+          "Vegetable Soup"
+        ],
+        "precision": 0.2,
+        "recall": 0.5,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "hybrid": {
+        "top5": [
+          "Caesar Salad",
+          "Tomato Basil Bruschetta",
+          "Pasta Marinara",
+          "Greek Salad",
+          "Hummus with Pita"
+        ],
+        "precision": 0.2,
+        "recall": 0.5,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      }
+    },
+    {
+      "id": "messy-names",
+      "pantry_size": 6,
+      "relevant": [
+        "Caprese Salad",
+        "Tomato Basil Bruschetta"
+      ],
+      "lexical": {
+        "top5": [
+          "Tomato Basil Bruschetta",
+          "Caprese Salad",
+          "Pasta Marinara",
+          "Turkey Sandwich",
+          "Caesar Salad"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      },
+      "embedding": {
+        "top5": [
+          "Greek Salad",
+          "Pasta Marinara",
+          "Caesar Salad",
+          "Tomato Basil Bruschetta",
+          "Caprese Salad"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 0.0,
+        "max_precision": 0.4
+      },
+      "hybrid": {
+        "top5": [
+          "Tomato Basil Bruschetta",
+          "Caprese Salad",
+          "Pasta Marinara",
+          "Caesar Salad",
+          "Greek Salad"
+        ],
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.4
+      }
+    },
+    {
+      "id": "potato-night",
+      "pantry_size": 7,
+      "relevant": [
+        "Baked Potatoes",
+        "Cheese Omelette",
+        "Classic Scrambled Eggs"
+      ],
+      "lexical": {
+        "top5": [
+          "Baked Potatoes",
+          "Cheese Omelette",
+          "Classic Scrambled Eggs",
+          "Grilled Cheese Sandwich",
+          "Spaghetti Carbonara"
+        ],
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.6
+      },
+      "embedding": {
+        "top5": [
+          "Baked Potatoes",
+          "Greek Salad",
+          "Shakshuka",
+          "Beef Tacos",
+          "Minestrone Soup"
+        ],
+        "precision": 0.2,
+        "recall": 0.3333333333333333,
+        "hit_at_1": 1.0,
+        "max_precision": 0.6
+      },
+      "hybrid": {
+        "top5": [
+          "Baked Potatoes",
+          "Cheese Omelette",
+          "French Toast",
+          "Chicken Quesadillas",
+          "Lemon Garlic Salmon"
+        ],
+        "precision": 0.4,
+        "recall": 0.6666666666666666,
+        "hit_at_1": 1.0,
+        "max_precision": 0.6
+      }
+    },
+    {
+      "id": "mango",
+      "pantry_size": 6,
+      "relevant": [
+        "Mango Salsa"
+      ],
+      "lexical": {
+        "top5": [
+          "Mango Salsa",
+          "Chicken Quesadillas",
+          "Greek Salad",
+          "Avocado Toast",
+          "Lentil Soup"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      },
+      "embedding": {
+        "top5": [
+          "Mango Salsa",
+          "Greek Salad",
+          "Fried Rice",
+          "Chicken Quesadillas",
+          "Caesar Salad"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      },
+      "hybrid": {
+        "top5": [
+          "Mango Salsa",
+          "Chicken Quesadillas",
+          "Greek Salad",
+          "Lentil Soup",
+          "Lemon Garlic Salmon"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      }
+    },
+    {
+      "id": "shakshuka",
+      "pantry_size": 9,
+      "relevant": [
+        "Shakshuka"
+      ],
+      "lexical": {
+        "top5": [
+          "Shakshuka",
+          "Tomato Basil Bruschetta",
+          "Beef Tacos",
+          "Turkey Sandwich",
+          "Fried Rice"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      },
+      "embedding": {
+        "top5": [
+          "Shakshuka",
+          "Greek Salad",
+          "Beef Tacos",
+          "Spaghetti Carbonara",
+          "Fried Rice"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      },
+      "hybrid": {
+        "top5": [
+          "Shakshuka",
+          "Beef Tacos",
+          "Turkey Sandwich",
+          "Fried Rice",
+          "Lentil Soup"
+        ],
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_at_1": 1.0,
+        "max_precision": 0.2
+      }
+    }
+  ]
+}
