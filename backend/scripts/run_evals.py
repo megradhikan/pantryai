@@ -11,6 +11,11 @@ Recipe matching eval: compares three rankers over the seeded recipe corpus
              This ranks the same way as the pgvector `<=>` query, but is exact.
   hybrid     top 15 by embedding, re-ranked by match_recipes()
 No LLM is called, so running this costs nothing.
+
+OCR extraction eval: validates the receipt parsing pipeline against hand-labeled
+scenarios in backend/eval/receipts/scenarios.json. Calls extract_items() on each
+scenario's raw OCR text and checks how many expected item names appear in the
+extracted output (case-insensitive, partial match). Requires GEMINI_API_KEY.
 """
 import json
 import os
@@ -114,16 +119,79 @@ def run_recipe_eval():
     }
 
 
+def run_receipt_eval():
+    from agents.receipt_agent import extract_items
+
+    with open(os.path.join(BACKEND, "eval", "receipts", "scenarios.json")) as f:
+        spec = json.load(f)
+    scenarios = spec["scenarios"]
+
+    results = []
+    total_expected = 0
+    total_hits = 0
+    for s in scenarios:
+        items, _, _ = extract_items(s["ocr_text"])
+        extracted_names = [i.name.lower() for i in items]
+        expected = [e.lower() for e in s["expected_items"]]
+        hits = 0
+        matched = []
+        missed = []
+        for exp in expected:
+            # partial match: "chicken breast" hits "boneless chicken breast"
+            found = any(exp in ext or ext in exp for ext in extracted_names)
+            if found:
+                hits += 1
+                matched.append(exp)
+            else:
+                missed.append(exp)
+        precision = hits / len(expected) if expected else 0.0
+        total_expected += len(expected)
+        total_hits += hits
+        results.append({
+            "id": s["id"],
+            "expected": expected,
+            "extracted": extracted_names,
+            "matched": matched,
+            "missed": missed,
+            "precision": round(precision, 4),
+        })
+
+    overall_precision = total_hits / total_expected if total_expected else 0.0
+    return {
+        "eval": "receipt_ocr_extraction",
+        "run_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "n_scenarios": len(scenarios),
+        "summary": {
+            "overall_precision": round(overall_precision, 4),
+            "total_expected_items": total_expected,
+            "total_matched_items": total_hits,
+        },
+        "per_scenario": results,
+    }
+
+
 def main():
     out_dir = os.path.join(BACKEND, "eval", "results")
     os.makedirs(out_dir, exist_ok=True)
-    result = run_recipe_eval()
+
+    recipe_result = run_recipe_eval()
     path = os.path.join(out_dir, "recipe_matching.json")
     with open(path, "w") as f:
-        json.dump(result, f, indent=2)
-    print(f"scenarios={result['n_scenarios']} recipes={result['n_recipes_in_corpus']}")
-    print(json.dumps(result["summary"], indent=2))
+        json.dump(recipe_result, f, indent=2)
+    print(f"[recipe] scenarios={recipe_result['n_scenarios']} recipes={recipe_result['n_recipes_in_corpus']}")
+    print(json.dumps(recipe_result["summary"], indent=2))
     print(f"wrote {path}")
+
+    if os.environ.get("GEMINI_API_KEY"):
+        print("\n[receipt] running OCR extraction eval...")
+        receipt_result = run_receipt_eval()
+        path = os.path.join(out_dir, "receipt_extraction.json")
+        with open(path, "w") as f:
+            json.dump(receipt_result, f, indent=2)
+        print(f"[receipt] overall_precision={receipt_result['summary']['overall_precision']}")
+        print(f"wrote {path}")
+    else:
+        print("\n[receipt] skipped — GEMINI_API_KEY not set")
 
 
 if __name__ == "__main__":

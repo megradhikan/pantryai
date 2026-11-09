@@ -1,0 +1,75 @@
+{
+  "description": "Hand-labeled OCR extraction scenarios for receipt parsing eval",
+  "labeling_rule": "Expected item names are the canonical normalized forms a human would expect after receipt parsing. Exact match (case-insensitive) counts as a hit.",
+  "scenarios": [
+    {
+      "id": "kroger_produce_heavy",
+      "description": "Produce-heavy Kroger receipt with OCR abbreviations",
+      "ocr_text": "KROGER #0423\n04/15/2024\nBANANA 3LB         1.29\nSTRAWBRY PINT      3.49\nSPINACH 5OZ        2.99\nROM LETTUCE        1.79\nTOMATO VINE        2.49\nCARROT BAG         1.99\nBROC CROWN         1.49\nSUBTOTAL          15.53\nTAX                0.00\nTOTAL             15.53",
+      "expected_items": [
+        "Banana",
+        "Strawberries",
+        "Spinach",
+        "Romaine Lettuce",
+        "Tomato",
+        "Carrots",
+        "Broccoli"
+      ]
+    },
+    {
+      "id": "walmart_mixed_abbreviated",
+      "description": "Walmart receipt with protein and dairy, heavy abbreviations",
+      "ocr_text": "WAL-MART SUPERCENTER\nCHKN BRST BNL      7.98\nGRND BEF 80/20     5.47\nSALMN FILT         9.97\nWHL MLK GAL        4.28\nCHDR SLCD          3.48\nEGGS LG 12CT       2.98\nYGRT STRWBY        0.98\nTOTAL             35.14",
+      "expected_items": [
+        "Chicken Breast",
+        "Ground Beef",
+        "Salmon Fillet",
+        "Whole Milk",
+        "Cheddar Cheese",
+        "Eggs",
+        "Strawberry Yogurt"
+      ]
+    },
+    {
+      "id": "target_pantry_staples",
+      "description": "Target receipt with pantry staples and grains",
+      "ocr_text": "TARGET STORE 1842\nPASTA PENNE 1LB    1.29\nTOMATO SCE 24OZ    1.89\nOLIVE OIL 16OZ     6.99\nGARLIC MINCD       2.49\nBLK BEANS CAN      0.99\nRICE JASMINE 5LB   4.99\nPNUT BTTR 16OZ     3.29\nTOTAL             21.93",
+      "expected_items": [
+        "Penne Pasta",
+        "Tomato Sauce",
+        "Olive Oil",
+        "Minced Garlic",
+        "Black Beans",
+        "Jasmine Rice",
+        "Peanut Butter"
+      ]
+    },
+    {
+      "id": "costco_bulk_items",
+      "description": "Costco receipt with bulk quantities",
+      "ocr_text": "COSTCO WHOLESALE\nMEMBER: 123456\nBF TENDRLOIN 2PK  39.99\nSALMN ATLN 4PK    29.99\nORGN SPNCH 2LB     7.99\nBLUEBRY 2LB        9.99\nALMND RAW 3LB     14.99\nFRZN PIZZA 2PK    12.99\nTOTAL            115.94",
+      "expected_items": [
+        "Beef Tenderloin",
+        "Atlantic Salmon",
+        "Organic Spinach",
+        "Blueberries",
+        "Raw Almonds",
+        "Frozen Pizza"
+      ]
+    },
+    {
+      "id": "whole_foods_organic",
+      "description": "Whole Foods receipt with organic produce and specialty items",
+      "ocr_text": "WHOLE FOODS MARKET\n365 ORG MLKWHL GAL  5.99\nORG AVOCADO EA      1.49\nORG KALE BNCH       2.49\nORG LEMON BAG       3.99\nFREE RNG EGGS       5.49\nGRK YOGRT PLN       4.99\nORG CHKN THGHS      9.99\nTOTAL              34.43",
+      "expected_items": [
+        "Organic Whole Milk",
+        "Avocado",
+        "Kale",
+        "Lemons",
+        "Free Range Eggs",
+        "Greek Yogurt",
+        "Organic Chicken Thighs"
+      ]
+    }
+  ]
+}

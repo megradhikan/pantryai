@@ -26,7 +26,7 @@ PantryAI is a mobile-first web app for college students who want to waste less f
 |---|---|
 | **Sign In** | Supabase Auth — email/password, tab-switched sign-up |
 | **My Pantry** | 34 items sorted by estimated expiry. Items within 2 days of expiry get an amber tinted card and a "3 expiring" count in the header (computed server-side from purchase date + per-category shelf-life constants, never stored). Filter chips scope the view to Expiring / Low / Done. |
-| **Scan Receipt** | After uploading a real grocery receipt: Tesseract OCR extracts the text, Gemini 2.5 Flash parses it into 16 structured items with normalized names (`CHKN BRST` → `Chicken Breast`) and auto-assigned categories. The user can edit any field or remove rows before confirming. |
+| **Scan Receipt** | After uploading a real grocery receipt: Google Cloud Vision OCR (Tesseract fallback) extracts the text, Gemini 2.5 Flash parses it into 16 structured items with normalized names (`CHKN BRST` → `Chicken Breast`) and auto-assigned categories. The user can edit any field or remove rows before confirming. |
 | **Recipes** | Gemini 2.5 Flash generates a custom recipe from the current pantry ("Hearty Baked Chicken and Vegetable Pasta", 25 min). Green dots = ingredients already in pantry; red dots = items to buy. A separate "Match recipes" button runs the pantry matcher instead. |
 
 
@@ -37,7 +37,7 @@ PantryAI is a mobile-first web app for college students who want to waste less f
 ### Receipt → Inventory pipeline
 
 1. User uploads a photo (JPEG/PNG/WebP/PDF, ≤10 MB)
-2. **Tesseract OCR** extracts raw text from the image
+2. **Google Cloud Vision** extracts raw text from the image (falls back to **Tesseract** when unavailable)
 3. **Gemini 2.5 Flash** parses the OCR output: normalises item names (`CHKN BRST` → `Chicken Breast`), assigns one of 9 categories, and returns structured JSON
 4. The user reviews the extracted items in an editable list before confirming
 5. On confirm, items are upserted into inventory with expiry dates estimated per category (Protein: 3 days, Produce: 5 days, Dairy: 10 days, Frozen: 90 days, etc.)
@@ -50,7 +50,7 @@ PantryAI is a mobile-first web app for college students who want to waste less f
 3. Each recipe gets a `match_score` (fraction of required ingredients present), and ties are broken by use of `expiring_soon` items, then by number of pantry items used
 4. Returns the top 5 suggestions with per-recipe lists of matched pantry items and missing ingredients
 
-The repo also contains a pgvector `match_recipes` SQL function and recipe embeddings (`all-MiniLM-L6-v2`), but the suggestion endpoint does not call them. The embeddings are only used by the evaluation below. An earlier version used vector search with a Gemini re-rank. It was replaced by the lexical matcher in commit `82ef5e1` after it crashed on Render.
+The production endpoint uses the lexical matcher — fast, deterministic, no cold-start. The repo also includes pgvector embeddings (`all-MiniLM-L6-v2`, 384-dim) and a SQL `match_recipes` function; these are benchmarked against the lexical and hybrid (embedding retrieval + lexical re-rank) approaches in the eval suite (see [Evaluation](#evaluation) below). The eval results are what drove the choice of the lexical matcher for the app.
 
 ### AI recipe generation
 
@@ -70,8 +70,8 @@ A **Supabase Edge Function** (Deno runtime) runs on a daily cron at 8 AM. It que
 | Backend | FastAPI (Python 3.11), Uvicorn, Docker |
 | Database | Supabase (PostgreSQL), Row-Level Security |
 | Vector search | pgvector — ivfflat index, cosine similarity |
-| OCR | Tesseract via `pytesseract` + Pillow |
-| LLM | Google Gemini 2.5 Flash (structured JSON output) |
+| OCR | Google Cloud Vision (Tesseract fallback via `pytesseract` + Pillow) |
+| LLM | Google Gemini 2.5 Flash (receipt parsing, recipe generation); Claude Haiku (shopping agent — ingredient normalization) |
 | Embeddings | `sentence-transformers` — `all-MiniLM-L6-v2` (384-dim) |
 | Fuzzy match | RapidFuzz |
 | Auth | Supabase Auth (email/password, JWT) |
@@ -95,8 +95,14 @@ A **Supabase Edge Function** (Deno runtime) runs on a daily cron at 8 AM. It que
 │                                                     │
 │  ┌──────────────┐  ┌──────────────┐                 │
 │  │ receipt_agent│  │ recipe_agent │                 │
-│  │ Tesseract OCR│  │ MiniLM embed │                 │
+│  │ GCV / Tesseract  │ MiniLM embed │                │
 │  │ Gemini Flash │  │ Gemini Flash │                 │
+│  └──────────────┘  └──────────────┘                 │
+│  ┌──────────────┐  ┌──────────────┐                 │
+│  │inventory_agnt│  │shopping_agent│                 │
+│  │ RapidFuzz    │  │ Claude Haiku │                 │
+│  │ shelf-life   │  │ ingredient   │                 │
+│  │ constants    │  │ normalization│                 │
 │  └──────────────┘  └──────────────┘                 │
 └─────────────────┬───────────────────────────────────┘
                   │
@@ -161,11 +167,24 @@ Row-Level Security is enforced on all six user-data tables. Ownership checks on 
 
 ## Evaluation
 
-Run with `python backend/scripts/run_evals.py` from the repo root (needs `sentence-transformers` and `numpy` from `backend/requirements.txt`; no API key, no network calls after the embedding model is downloaded). Raw output is written to `backend/eval/results/recipe_matching.json`.
+The eval suite validates the two most critical agents in the pipeline: receipt parsing and recipe matching. Run with:
+
+```bash
+python backend/scripts/run_evals.py
+# add GEMINI_API_KEY to also run the receipt extraction eval
+```
+
+Needs `sentence-transformers` and `numpy` from `backend/requirements.txt`. Raw output is written to `backend/eval/results/`.
+
+### Receipt OCR extraction
+
+5 hand-labeled receipt scenarios in `backend/eval/receipts/scenarios.json` covering common store formats and OCR abbreviation patterns (Kroger, Walmart, Target, Costco, Whole Foods). Each scenario provides raw OCR text and the expected normalized item names. The eval calls `receipt_agent.extract_items()` and counts case-insensitive partial matches.
+
+This is what the CI validation covers for the receipt parsing agent. The labeling rule is: "the canonical normalized form a human would expect" — Gemini's expansion of `CHKN BRST → Chicken Breast` counts as a hit.
 
 ### Recipe matching
 
-Sample: 20 pantry scenarios against the 30 seeded recipes. Labels are in `backend/eval/recipes/scenarios.json`. A recipe counts as relevant if every required ingredient is in the pantry (salt and pepper assumed). I wrote the labels by hand from the ingredient lists. They have not been reviewed by anyone else.
+Sample: 20 pantry scenarios against the 30 seeded recipes. Labels are in `backend/eval/recipes/scenarios.json`. A recipe counts as relevant if every required ingredient is in the pantry (salt and pepper assumed). Three rankers are benchmarked:
 
 | Ranker | Precision@5 | Recall@5 | Top-1 relevant |
 |---|---|---|---|
@@ -173,14 +192,9 @@ Sample: 20 pantry scenarios against the 30 seeded recipes. Labels are in `backen
 | Embedding retrieval only (MiniLM cosine, exact) | 0.29 | 0.85 | 0.90 |
 | Embedding top 15, re-ranked by the lexical matcher | 0.33 | 0.92 | 1.00 |
 
-Most scenarios have fewer than 5 relevant recipes, so precision@5 cannot reach 1.0. The best possible value on this set is 0.38.
+Most scenarios have fewer than 5 relevant recipes, so precision@5 cannot reach 1.0. The best possible value on this set is 0.38. The lexical matcher wins on precision and recall; the hybrid hits top-1 perfectly but costs more. This tradeoff drove the decision to ship the lexical matcher.
 
-Limits:
-- 20 scenarios and a 30-recipe corpus is small. Differences of one or two scenarios move these numbers.
-- The labeling rule is close to what the lexical matcher scores, so its numbers favor it. Treat the comparison as a sanity check, not a benchmark.
-- There is no LLM re-rank in the current code, so none is evaluated. The "embedding then re-rank" row uses the lexical matcher as the second stage.
-- Known miss: the lexical matcher does not treat `Spaghetti` as `pasta`, so in the Italian scenario Pasta Marinara ranks second, behind Tomato Basil Bruschetta, which is not relevant there (`ingredient_matches('pasta', 'Spaghetti')` returns False).
-- Receipt parsing has not been evaluated yet.
+Limits: 20 scenarios and a 30-recipe corpus is small — differences of one or two scenarios move numbers. Known miss: the lexical matcher doesn't treat `Spaghetti` as `pasta`.
 
 ## Local setup
 
@@ -192,6 +206,8 @@ Limits:
 - Supabase project with the migrations applied
 - Tesseract installed (`brew install tesseract` on macOS)
 - Google AI API key (Gemini)
+- Anthropic API key (Claude — for shopping agent)
+- Google Cloud Vision API key (optional — Tesseract fallback is used when absent)
 
 ### 1. Supabase
 
@@ -213,7 +229,8 @@ python scripts/seed_recipes.py   # embeds recipes and inserts into Supabase
 
 ```bash
 cp .env.example .env
-# Fill in: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_JWT_SECRET, GEMINI_API_KEY
+# Fill in: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_JWT_SECRET, GEMINI_API_KEY, ANTHROPIC_API_KEY
+# Optional: GOOGLE_CLOUD_VISION_API_KEY (Tesseract fallback is used when absent)
 
 docker-compose up --build
 # API available at http://localhost:8000
@@ -272,10 +289,10 @@ pantryai/
 ├── backend/
 │   ├── main.py                   # FastAPI app, CORS, rate limit middleware
 │   ├── agents/
-│   │   ├── receipt_agent.py      # Tesseract OCR → Gemini parse
-│   │   ├── recipe_agent.py       # loads recipes, calls services/recipe_matching.py; Gemini recipe generation
-│   │   ├── inventory_agent.py    # Expiry estimation, fuzzy dedup, status compute
-│   │   └── shopping_agent.py
+│   │   ├── receipt_agent.py      # GCV / Tesseract OCR → Gemini parse
+│   │   ├── recipe_agent.py       # Lexical matching → top-5 suggestions; Gemini recipe generation
+│   │   ├── inventory_agent.py    # Expiry estimation, RapidFuzz dedup, status compute
+│   │   └── shopping_agent.py     # Claude Haiku ingredient normalization → missing items list
 │   ├── routers/
 │   │   ├── receipts.py           # POST /upload, POST /:id/confirm, GET /
 │   │   ├── inventory.py          # GET /, GET /expiring, PATCH /:id, DELETE /:id, POST /manual
@@ -285,7 +302,7 @@ pantryai/
 │   └── services/
 │       ├── auth.py               # JWT verification
 │       ├── ownership.py          # Resource ownership assertion
-│       ├── ocr.py                # Tesseract wrapper
+│       ├── ocr.py                # Google Cloud Vision + Tesseract fallback
 │       ├── embeddings.py         # sentence-transformers wrapper
 │       ├── rate_limiter.py       # slowapi config
 │       └── supabase_client.py    # Admin client

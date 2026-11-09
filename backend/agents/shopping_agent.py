@@ -1,5 +1,5 @@
 import os
-import google.generativeai as genai
+import anthropic
 from rapidfuzz import fuzz
 from services.supabase_client import get_admin_client
 from agents.inventory_agent import compute_status
@@ -10,15 +10,19 @@ Examples: "heavy whipping cream" → "cream", "boneless chicken breast" → "chi
 """
 
 
-def _get_model():
-    genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-    return genai.GenerativeModel("gemini-2.5-flash", system_instruction=NORMALIZE_PROMPT)
+def _get_client():
+    return anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
 
 def normalize_ingredient_name(name: str) -> str:
-    model = _get_model()
-    response = model.generate_content(name)
-    return response.text.strip().lower()
+    client = _get_client()
+    response = client.messages.create(
+        model="claude-haiku-4-5",
+        max_tokens=50,
+        system=NORMALIZE_PROMPT,
+        messages=[{"role": "user", "content": name}],
+    )
+    return response.content[0].text.strip().lower()
 
 
 def generate_shopping_list(recipe_id: str, user_id: str) -> list[dict]:
