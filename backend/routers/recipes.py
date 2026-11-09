@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Request
 from services.auth import get_current_user, require_admin
 from services.supabase_client import get_admin_client
 from services.rate_limiter import limiter
-from agents.recipe_agent import suggest_recipes, generate_recipe
+from agents.recipe_agent import suggest_recipes, generate_recipe, rag_generate_recipe
 from agents.inventory_agent import compute_status
 
 router = APIRouter()
@@ -50,7 +50,7 @@ async def get_generated_recipe(
     for item in inventory:
         item["status"] = compute_status(item)
 
-    recipe = generate_recipe(inventory)
+    recipe = rag_generate_recipe(inventory)
     return {"recipe": recipe}
 
 

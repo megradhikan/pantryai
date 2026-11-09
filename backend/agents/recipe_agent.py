@@ -55,6 +55,32 @@ Rules:
 - instructions: clear numbered steps.
 """
 
+RAG_PROMPT = """You are a recipe adaptation chef. You are given a user's pantry and a set of candidate recipes retrieved from a corpus.
+Your job is to pick the best-matching candidate and adapt it to use as many of the user's available pantry items as possible — substituting missing ingredients where sensible, adjusting quantities, and noting what still needs to be bought.
+Return ONLY valid JSON.
+
+Output schema:
+{
+  "title": string,
+  "source_recipe": string,
+  "ingredients": [{ "name": string, "quantity": float | null, "unit": string | null, "from_pantry": bool }],
+  "instructions": string,
+  "cuisine": string,
+  "prep_time_mins": int,
+  "pantry_items_used": [string],
+  "extra_items_needed": [{ "name": string, "quantity": float | null, "unit": string | null }],
+  "adaptations": [string]
+}
+
+Rules:
+- source_recipe: title of the candidate recipe you adapted.
+- adaptations: list of changes you made (e.g. "substituted cream with milk", "omitted pine nuts").
+- Prioritize pantry items expiring soon.
+- from_pantry: true only if the ingredient is present in the user's inventory.
+- extra_items_needed: keep minimal — adapt aggressively before saying something is missing.
+- instructions: clear numbered steps reflecting the adapted recipe.
+"""
+
 
 def _get_model(system_instruction=SYSTEM_PROMPT):
     genai.configure(api_key=os.environ["GEMINI_API_KEY"])
@@ -96,3 +122,32 @@ def generate_recipe(inventory: list[dict]) -> dict | None:
     response = model.generate_content(f"My pantry:\n{inventory_json}")
     raw = response.text.strip()
     return _extract_json(raw)
+
+
+def rag_generate_recipe(inventory: list[dict]) -> dict | None:
+    """Retrieve top corpus recipes, then adapt the best match to the user's pantry."""
+    active_items = [i for i in inventory if i["status"] not in ("finished", "expired")]
+    if not active_items:
+        return None
+
+    supabase = get_admin_client()
+    all_recipes = supabase.table("recipes").select("id, title, ingredients, instructions, cuisine").execute().data
+
+    candidates = match_recipes(active_items, all_recipes, limit=5)
+    if not candidates:
+        # no corpus match — fall back to pure generation
+        return generate_recipe(inventory)
+
+    candidate_ids = {str(c["recipe_id"]) for c in candidates}
+    candidate_recipes = [r for r in all_recipes if str(r["id"]) in candidate_ids]
+
+    inventory_json = json.dumps(
+        [{"name": i["name"], "category": i["category"], "status": i["status"]} for i in active_items]
+    )
+    candidates_json = json.dumps(candidate_recipes)
+
+    model = _get_model(system_instruction=RAG_PROMPT)
+    response = model.generate_content(
+        f"My pantry:\n{inventory_json}\n\nCandidate recipes:\n{candidates_json}"
+    )
+    return _extract_json(response.text.strip())
