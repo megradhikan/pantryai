@@ -2,7 +2,9 @@
 
 **Turn a grocery receipt photo into a living pantry — with AI-powered expiry tracking, recipe suggestions, and daily push reminders.**
 
-PantryAI is a mobile-first web app for college students who want to waste less food. Scan a receipt after a grocery run, and the app builds your inventory automatically: item names normalized, categories assigned, expiry dates estimated. From there it surfaces what's expiring, suggests recipes that use what you already have (prioritizing items close to expiry), and builds a shopping list for anything missing.
+> **[Live demo →](https://pantryai-j0bwmd0rw-radhikan-2852s-projects.vercel.app)**
+
+PantryAI is a solo end-to-end build: a mobile-first full-stack web app that reduces food waste for college students. Scan a grocery receipt and the app builds your inventory automatically — Google Cloud Vision OCR extracts text, Gemini 2.5 Flash normalises item names, assigns categories, and estimates expiry dates. A 4-agent FastAPI backend handles receipt parsing, inventory management, recipe matching, and shopping list generation. The app is deployed on Vercel (frontend) with a FastAPI backend.
 
 <p align="center">
   <img src="docs/screenshots/demo.gif" width="260" alt="PantryAI walkthrough: sign in, pantry dashboard, receipt scan review, AI recipe suggestion" />
@@ -228,7 +230,7 @@ python scripts/seed_recipes.py   # embeds recipes and inserts into Supabase
 
 ```bash
 cp .env.example .env
-# Fill in: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_JWT_SECRET, GEMINI_API_KEY, ANTHROPIC_API_KEY
+# Fill in: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_JWT_SECRET, GEMINI_API_KEY
 # Optional: GOOGLE_CLOUD_VISION_API_KEY (Tesseract fallback is used when absent)
 
 docker-compose up --build
