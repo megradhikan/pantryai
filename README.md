@@ -2,7 +2,7 @@
 
 **Turn a grocery receipt photo into a living pantry — with AI-powered expiry tracking, recipe suggestions, and daily push reminders.**
 
-> **[Live demo →](https://pantryai-j0bwmd0rw-radhikan-2852s-projects.vercel.app)**
+> **[Live demo →](https://pantryai-k9vm3gz3i-radhikan-2852s-projects.vercel.app)**
 
 PantryAI is a solo end-to-end build: a mobile-first full-stack web app that reduces food waste for college students. Scan a grocery receipt and the app builds your inventory automatically — Google Cloud Vision OCR extracts text, Gemini 2.5 Flash normalises item names, assigns categories, and estimates expiry dates. A 4-agent FastAPI backend handles receipt parsing, inventory management, recipe matching, and shopping list generation. The app is deployed on Vercel (frontend) with a FastAPI backend.
 
