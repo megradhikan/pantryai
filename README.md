@@ -71,7 +71,7 @@ A **Supabase Edge Function** (Deno runtime) runs on a daily cron at 8 AM. It que
 | Database | Supabase (PostgreSQL), Row-Level Security |
 | Vector search | pgvector — ivfflat index, cosine similarity |
 | OCR | Google Cloud Vision (Tesseract fallback via `pytesseract` + Pillow) |
-| LLM | Google Gemini 2.5 Flash (receipt parsing, recipe generation); Claude Haiku (shopping agent — ingredient normalization) |
+| LLM | Google Gemini 2.5 Flash (structured JSON output — all four agents) |
 | Embeddings | `sentence-transformers` — `all-MiniLM-L6-v2` (384-dim) |
 | Fuzzy match | RapidFuzz |
 | Auth | Supabase Auth (email/password, JWT) |
@@ -100,7 +100,7 @@ A **Supabase Edge Function** (Deno runtime) runs on a daily cron at 8 AM. It que
 │  └──────────────┘  └──────────────┘                 │
 │  ┌──────────────┐  ┌──────────────┐                 │
 │  │inventory_agnt│  │shopping_agent│                 │
-│  │ RapidFuzz    │  │ Claude Haiku │                 │
+│  │ RapidFuzz    │  │ Gemini Flash │                 │
 │  │ shelf-life   │  │ ingredient   │                 │
 │  │ constants    │  │ normalization│                 │
 │  └──────────────┘  └──────────────┘                 │
@@ -206,7 +206,6 @@ Limits: 20 scenarios and a 30-recipe corpus is small — differences of one or t
 - Supabase project with the migrations applied
 - Tesseract installed (`brew install tesseract` on macOS)
 - Google AI API key (Gemini)
-- Anthropic API key (Claude — for shopping agent)
 - Google Cloud Vision API key (optional — Tesseract fallback is used when absent)
 
 ### 1. Supabase
@@ -292,7 +291,7 @@ pantryai/
 │   │   ├── receipt_agent.py      # GCV / Tesseract OCR → Gemini parse
 │   │   ├── recipe_agent.py       # Lexical matching → top-5 suggestions; Gemini recipe generation
 │   │   ├── inventory_agent.py    # Expiry estimation, RapidFuzz dedup, status compute
-│   │   └── shopping_agent.py     # Claude Haiku ingredient normalization → missing items list
+│   │   └── shopping_agent.py     # Gemini ingredient normalization → missing items list
 │   ├── routers/
 │   │   ├── receipts.py           # POST /upload, POST /:id/confirm, GET /
 │   │   ├── inventory.py          # GET /, GET /expiring, PATCH /:id, DELETE /:id, POST /manual
