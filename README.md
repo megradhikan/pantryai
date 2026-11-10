@@ -39,7 +39,7 @@ PantryAI is a solo end-to-end build: a mobile-first full-stack web app that redu
 ### Receipt → Inventory pipeline
 
 1. User uploads a photo (JPEG/PNG/WebP/PDF, ≤10 MB)
-2. **Google Cloud Vision** extracts raw text from the image (falls back to **Tesseract** when unavailable)
+2. **Google Cloud Vision** extracts raw text from the image (falls back to **Tesseract**, then **Gemini vision** for PDFs and unreadable images)
 3. **Gemini 2.5 Flash** parses the OCR output: normalises item names (`CHKN BRST` → `Chicken Breast`), assigns one of 9 categories, and returns structured JSON
 4. The user reviews the extracted items in an editable list before confirming
 5. On confirm, items are upserted into inventory with expiry dates estimated per category (Protein: 3 days, Produce: 5 days, Dairy: 10 days, Frozen: 90 days, etc.)

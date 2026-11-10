@@ -39,8 +39,11 @@ async def upload_receipt(
         storage_path, file_bytes, {"content-type": file.content_type}
     )
 
-    ocr_text, engine, confidence = run_ocr(file_bytes, file.content_type)
-    items, store_name, metadata = extract_items(ocr_text)
+    try:
+        ocr_text, engine, confidence = run_ocr(file_bytes, file.content_type)
+        items, store_name, metadata = extract_items(ocr_text)
+    except Exception:
+        raise HTTPException(422, "Couldn't read that receipt. Try a clearer JPEG or PNG photo.")
     metadata.ocr_engine = engine
     if confidence is not None:
         metadata.confidence = confidence
